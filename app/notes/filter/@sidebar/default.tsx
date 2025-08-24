@@ -6,6 +6,7 @@ import { getCategories } from "@/lib/api"
 import { Routes } from "@/config/routes"
 import { usePathname } from "next/navigation"
 import clsx from "clsx"
+import LoadingIndicator from "@/components/LoadingIndicator/LoadingIndicator"
 
 const SidebarNotes = () => {
 	const categories = getCategories()
@@ -17,11 +18,12 @@ const SidebarNotes = () => {
 				<li key={category} className={css.menuItem}>
 					<Link
 						href={Routes.NotesFilter + category}
+						scroll={false}
 						className={clsx(
 							css.menuLink,
-							currentPath === category && ` ${css.activeMenuLink}`
+							currentPath === category && css.activeMenuLink
 						)}>
-						{category}
+						{category} <LoadingIndicator />
 					</Link>
 				</li>
 			))}

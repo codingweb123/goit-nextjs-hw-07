@@ -7,6 +7,8 @@ import Link from "next/link"
 import { useState } from "react"
 import { usePathname } from "next/navigation"
 import clsx from "clsx"
+import LoadingIndicator from "../LoadingIndicator/LoadingIndicator"
+import Loading from "@/app/loading"
 
 const TagsMenu = () => {
 	const [isNotesOpen, setIsNotesOpen] = useState<boolean>(false)
@@ -28,12 +30,12 @@ const TagsMenu = () => {
 						<li key={category} className={css.menuItem}>
 							<Link
 								href={Routes.NotesFilter + category}
+								scroll={false}
 								className={clsx(
 									css.menuLink,
-									currentPath === category && ` ${css.activeMenuLink}`
-								)}
-								onClick={() => setIsNotesOpen(false)}>
-								{category}
+									currentPath === category && css.activeMenuLink
+								)}>
+								{category} <LoadingIndicator />
 							</Link>
 						</li>
 					))}
