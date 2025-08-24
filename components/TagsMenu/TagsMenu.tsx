@@ -8,7 +8,6 @@ import { useState } from "react"
 import { usePathname } from "next/navigation"
 import clsx from "clsx"
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator"
-import Loading from "@/app/loading"
 
 const TagsMenu = () => {
 	const [isNotesOpen, setIsNotesOpen] = useState<boolean>(false)
