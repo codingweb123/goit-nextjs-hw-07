@@ -4,34 +4,21 @@ import { Formik, Form, ErrorMessage, type FormikHelpers, Field } from "formik"
 import css from "./NoteForm.module.css"
 import * as Yup from "yup"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { createNote, getCategories } from "@/lib/api"
+import { createNote, Tags } from "@/lib/api"
 import { Loading } from "notiflix"
 import toast from "react-hot-toast"
 
 interface NoteFormProps {
+	categories: Tags
 	onSubmit: () => void
 	onCancel: () => void
 }
 
-const formTags = getCategories()
-
-export interface InitialValues {
+interface InitialValues {
 	title: string
 	content: string
-	tag: (typeof formTags)[number]
+	tag: Tags[number]
 }
-
-const formScheme = Yup.object().shape({
-	title: Yup.string()
-		.min(3, "Title must be at least 3 characters")
-		.max(50, "Title must be less or equal to 50 characters")
-		.required("Title is required"),
-	content: Yup.string().max(
-		500,
-		"Content must be less or equal to 500 characters"
-	),
-	tag: Yup.string().oneOf(formTags),
-})
 
 const initialValues: InitialValues = {
 	title: "",
@@ -39,7 +26,22 @@ const initialValues: InitialValues = {
 	tag: "Todo",
 }
 
-export default function NoteForm({ onSubmit, onCancel }: NoteFormProps) {
+export default function NoteForm({
+	categories,
+	onSubmit,
+	onCancel,
+}: NoteFormProps) {
+	const formScheme = Yup.object().shape({
+		title: Yup.string()
+			.min(3, "Title must be at least 3 characters")
+			.max(50, "Title must be less or equal to 50 characters")
+			.required("Title is required"),
+		content: Yup.string().max(
+			500,
+			"Content must be less or equal to 500 characters"
+		),
+		tag: Yup.string().oneOf(categories),
+	})
 	const queryClient = useQueryClient()
 	const noteCreation = useMutation({
 		mutationFn: async ({ title, content, tag }: InitialValues) => {
@@ -65,6 +67,7 @@ export default function NoteForm({ onSubmit, onCancel }: NoteFormProps) {
 		noteCreation.mutate(values)
 		actions.resetForm()
 	}
+
 	return (
 		<Formik
 			initialValues={initialValues}
@@ -92,11 +95,13 @@ export default function NoteForm({ onSubmit, onCancel }: NoteFormProps) {
 				<div className={css.formGroup}>
 					<label htmlFor="tag">Tag</label>
 					<Field as="select" name="tag" id="tag" className={css.select}>
-						{formTags.filter(tag => tag !== "All").map(tag => (
-							<option key={tag} value={tag}>
-								{tag}
-							</option>
-						))}
+						{categories
+							.filter(tag => tag !== "All")
+							.map(tag => (
+								<option key={tag} value={tag}>
+									{tag}
+								</option>
+							))}
 					</Field>
 					<ErrorMessage name="tag" component="span" className={css.error} />
 				</div>

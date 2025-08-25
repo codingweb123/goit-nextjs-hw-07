@@ -1,16 +1,10 @@
-"use client"
-
 import Link from "next/link"
 import css from "./SidebarNotes.module.css"
 import { getCategories } from "@/lib/api"
 import { Routes } from "@/config/routes"
-import { usePathname } from "next/navigation"
-import clsx from "clsx"
-import LoadingIndicator from "@/components/LoadingIndicator/LoadingIndicator"
 
-const SidebarNotes = () => {
-	const categories = getCategories()
-	const currentPath = usePathname().replace(Routes.NotesFilter, "")
+const SidebarNotes = async () => {
+	const categories = await getCategories()
 
 	return (
 		<ul className={css.menuList}>
@@ -19,11 +13,8 @@ const SidebarNotes = () => {
 					<Link
 						href={Routes.NotesFilter + category}
 						scroll={false}
-						className={clsx(
-							css.menuLink,
-							currentPath === category && css.activeMenuLink
-						)}>
-						{category} <LoadingIndicator />
+						className={css.menuLink}>
+						{category}
 					</Link>
 				</li>
 			))}

@@ -32,6 +32,7 @@ const NoteDetailsClient = () => {
 				<div className={css.header}>
 					<h2>{note.title}</h2>
 				</div>
+				<b>{note.tag}</b>
 				<p className={css.content}>{note.content}</p>
 				<p className={css.date}>{note.updatedAt ?? note.createdAt}</p>
 				<button onClick={handleBack}>Back</button>

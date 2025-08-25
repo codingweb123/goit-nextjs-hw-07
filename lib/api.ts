@@ -5,28 +5,31 @@ axios.defaults.baseURL = "https://notehub-public.goit.study/api/"
 axios.defaults.headers["Authorization"] =
 	`Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`
 
-export type Tags = ReturnType<typeof getCategories>[number]
-type SortBy = "created" | "updated" | undefined
+const myAPIInstance = axios.create({
+	baseURL: process.env.NEXT_PUBLIC_API_URL + "/api/",
+	headers: {
+		Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
+	},
+})
+
+export type Tags = string[]
+
+type SortBy = "created" | "updated"
 
 interface FetchNotes {
 	notes: Note[]
 	totalPages: number
 }
 
-interface Error {
-	message: string
-	error?: string
-}
-
 export const fetchNotes = async (
 	search: string,
 	page: number = 1,
 	perPage: number = 10,
-	tag?: Tags,
+	tag?: Tags[number],
 	sortBy?: SortBy
 ) => {
 	tag = tag === "All" ? undefined : tag
-	const { data } = await axios<FetchNotes>("notes", {
+	const { data } = await axios.get<FetchNotes>("notes", {
 		params: {
 			search,
 			page,
@@ -43,7 +46,7 @@ export const createNote = async (
 	content: string,
 	tag: string
 ) => {
-	const { data } = await axios.post<Note | Error>("notes", {
+	const { data } = await axios.post<Note>("notes", {
 		title,
 		content,
 		tag,
@@ -52,7 +55,7 @@ export const createNote = async (
 }
 
 export const fetchNoteById = async (id: string) => {
-	const { data } = await axios<Note>(`notes/${id}`)
+	const { data } = await axios.get<Note>(`notes/${id}`)
 	return data
 }
 
@@ -61,6 +64,7 @@ export const deleteNote = async (id: string) => {
 	return data
 }
 
-export const getCategories = () => {
-	return ["All", "Todo", "Work", "Personal", "Meeting", "Shopping"] as const
+export const getCategories = async () => {
+	const { data } = await myAPIInstance.get<Tags>("categories")
+	return data
 }
