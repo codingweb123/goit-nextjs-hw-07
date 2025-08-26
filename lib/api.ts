@@ -27,10 +27,9 @@ export const fetchNotes = async (
 	search: string,
 	page: number = 1,
 	perPage: number = 10,
-	tag?: Tags[number],
+	tag?: Exclude<Tags[number], "All">,
 	sortBy?: SortBy
 ) => {
-	tag = tag === "All" ? undefined : tag
 	const { data } = await axios.get<FetchNotes>("notes", {
 		params: {
 			search,
@@ -66,7 +65,4 @@ export const deleteNote = async (id: string) => {
 	return data
 }
 
-export const getCategories = async () => {
-	const { data } = await myAPIInstance.get<Tags>("categories")
-	return data
-}
+export const getCategories = Tags

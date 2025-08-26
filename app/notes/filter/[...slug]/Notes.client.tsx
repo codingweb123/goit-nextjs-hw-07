@@ -14,7 +14,7 @@ import css from "./Notes.client.module.css"
 
 interface NotesClientProps {
 	categories: Tags
-	category: Tags[number]
+	category: Exclude<Tags[number], "All"> | undefined
 }
 
 const NotesClient = ({ categories, category }: NotesClientProps) => {

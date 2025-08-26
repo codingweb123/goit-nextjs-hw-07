@@ -14,15 +14,15 @@ export const dynamicParams = false
 export const revalidate = 900
 
 export const generateStaticParams = async () => {
-	const categories = await getCategories()
+	const categories = getCategories
 	return categories.map(category => ({ slug: [category] }))
 }
 
 export default async function NotesFilter({ params }: NotesFilterProps) {
 	const queryClient = new QueryClient()
-	const categories = await getCategories()
+	const categories = getCategories
 	const { slug } = await params
-	const category = slug[0]
+	const category = slug[0] === "All" ? undefined : slug[0]
 
 	await queryClient.prefetchQuery({
 		queryKey: ["notes", { search: "", page: 1, category }],
