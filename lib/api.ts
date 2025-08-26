@@ -5,13 +5,6 @@ axios.defaults.baseURL = "https://notehub-public.goit.study/api/"
 axios.defaults.headers["Authorization"] =
 	`Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`
 
-const myAPIInstance = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_API_URL + "/api/",
-	headers: {
-		Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
-	},
-})
-
 const Tags = ["All", "Todo", "Work", "Personal", "Meeting", "Shopping"] as const
 
 export type Tags = typeof Tags
