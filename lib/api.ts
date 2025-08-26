@@ -12,7 +12,9 @@ const myAPIInstance = axios.create({
 	},
 })
 
-export type Tags = string[]
+const Tags = ["All", "Todo", "Work", "Personal", "Meeting", "Shopping"] as const
+
+export type Tags = typeof Tags
 
 type SortBy = "created" | "updated"
 
